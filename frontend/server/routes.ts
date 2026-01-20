@@ -8,14 +8,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const apiKey = process.env.GOOGLE_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY;
 
 const genaiClient = new GoogleGenAI({
   apiKey : process.env.GOOGLE_GENAI_API_KEY || ""
 });
 
 // Ensure the API client includes the API key
-const apiClient = new ApiClient({
+const apiClient = new GoogleGenAI({
   apiKey,
 });
 
