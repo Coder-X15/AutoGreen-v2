@@ -11,7 +11,7 @@ export async function registerRoutes(
 ): Promise<Server> {
   
   const genaiClient = new GoogleGenAI({
-    apiKey : "AIzaSyC-A9QbviZCUafbNW4SkErZO0Q3pvh87Gc" // may need tobe removed
+    apiKey : process.env.GOOGLE_GENAI_API_KEY || ""
   });
   // Auth (Mock)
   app.post(api.auth.login.path, async (req, res) => {
