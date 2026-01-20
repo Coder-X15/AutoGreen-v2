@@ -4,15 +4,26 @@ import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
 import { GoogleGenAI } from "@google/genai";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const apiKey = process.env.GOOGLE_API_KEY;
+
+const genaiClient = new GoogleGenAI({
+  apiKey : process.env.GOOGLE_GENAI_API_KEY || ""
+});
+
+// Ensure the API client includes the API key
+const apiClient = new ApiClient({
+  apiKey,
+});
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
   
-  const genaiClient = new GoogleGenAI({
-    apiKey : process.env.GOOGLE_GENAI_API_KEY || ""
-  });
   // Auth (Mock)
   app.post(api.auth.login.path, async (req, res) => {
     const { username, password } = req.body;
