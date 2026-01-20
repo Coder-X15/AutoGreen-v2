@@ -11,12 +11,7 @@ dotenv.config();
 const apiKey = process.env.GEMINI_API_KEY;
 
 const genaiClient = new GoogleGenAI({
-  apiKey : process.env.GOOGLE_GENAI_API_KEY || ""
-});
-
-// Ensure the API client includes the API key
-const apiClient = new GoogleGenAI({
-  apiKey,
+  apiKey : apiKey || ""
 });
 
 export async function registerRoutes(
