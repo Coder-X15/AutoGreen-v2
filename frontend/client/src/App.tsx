@@ -3,8 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { BottomNav } from "@/components/BottomNav";
-import { useAuth } from "@/hooks/use-auth";
-
+import { ProtectedRoute } from "@/components/protected-route";
 import Auth from "@/pages/Auth";
 import Home from "@/pages/Home";
 import Plants from "@/pages/Plants";
@@ -13,24 +12,6 @@ import Tasks from "@/pages/Tasks";
 import Profile from "@/pages/Profile";
 import Chat from "@/pages/Chat";
 import NotFound from "@/pages/not-found";
-
-function ProtectedRoute({ component: Component, ...rest }: any) {
-  const { user, isLoading } = useAuth();
-  const [, setLocation] = useLocation();
-
-  if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-    </div>;
-  }
-
-  if (!user) {
-    setLocation("/auth");
-    return null;
-  }
-
-  return <Component {...rest} />;
-}
 
 function Router() {
   const [location] = useLocation();
@@ -42,24 +23,12 @@ function Router() {
         <Route path="/auth" component={Auth} />
         
         {/* Protected Routes */}
-        <Route path="/">
-          {() => <ProtectedRoute component={Home} />}
-        </Route>
-        <Route path="/plants">
-          {() => <ProtectedRoute component={Plants} />}
-        </Route>
-        <Route path="/trends">
-          {() => <ProtectedRoute component={Trends} />}
-        </Route>
-        <Route path="/tasks">
-          {() => <ProtectedRoute component={Tasks} />}
-        </Route>
-        <Route path="/profile">
-          {() => <ProtectedRoute component={Profile} />}
-        </Route>
-        <Route path="/chat">
-          {() => <ProtectedRoute component={Chat} />}
-        </Route>
+        <Route path="/" component={() => <ProtectedRoute component={Home} />} />
+        <Route path="/plants" component={() => <ProtectedRoute component={Plants} />} />
+        <Route path="/trends" component={() => <ProtectedRoute component={Trends} />} />
+        <Route path="/tasks" component={() => <ProtectedRoute component={Tasks} />} />
+        <Route path="/profile" component={() => <ProtectedRoute component={Profile} />} />
+        <Route path="/chat" component={() => <ProtectedRoute component={Chat} />} />
         
         <Route component={NotFound} />
       </Switch>

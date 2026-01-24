@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { api, buildUrl } from "@shared/routes";
 
-export function usePlants() {
+export function usePlants(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: [api.plants.list.path],
     queryFn: async () => {
@@ -9,10 +9,11 @@ export function usePlants() {
       if (!res.ok) throw new Error("Failed to fetch plants");
       return api.plants.list.responses[200].parse(await res.json());
     },
+    enabled: options?.enabled,
   });
 }
 
-export function usePlant(id: number) {
+export function usePlant(id: number, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: [api.plants.get.path, id],
     queryFn: async () => {
@@ -21,5 +22,6 @@ export function usePlant(id: number) {
       if (!res.ok) throw new Error("Failed to fetch plant");
       return api.plants.get.responses[200].parse(await res.json());
     },
+    enabled: options?.enabled,
   });
 }

@@ -11,6 +11,8 @@ import {
   messages
 } from './schema';
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:8000'; // Point directly to the backend
+
 export const errorSchemas = {
   validation: z.object({
     message: z.string(),
@@ -31,7 +33,7 @@ export const api = {
   auth: {
     login: {
       method: 'POST' as const,
-      path: '/api/login',
+      path: `${BASE_URL}/api/auth/login`,
       input: z.object({ username: z.string(), password: z.string() }),
       responses: {
         200: z.custom<typeof users.$inferSelect>(),
@@ -40,7 +42,7 @@ export const api = {
     },
     updateProfile: {
       method: 'PUT' as const,
-      path: '/api/user/:id',
+      path: `${BASE_URL}/api/auth/user/:id`,
       input: insertUserSchema.partial(),
       responses: {
         200: z.custom<typeof users.$inferSelect>(),
@@ -49,7 +51,7 @@ export const api = {
     },
     getUser: {
       method: 'GET' as const,
-      path: '/api/user/:id',
+      path: `${BASE_URL}/api/auth/user/:id`,
       responses: {
         200: z.custom<typeof users.$inferSelect>(),
         404: errorSchemas.notFound,
@@ -59,14 +61,14 @@ export const api = {
   plants: {
     list: {
       method: 'GET' as const,
-      path: '/api/plants',
+      path: `${BASE_URL}/api/plants`,
       responses: {
         200: z.array(z.custom<typeof plants.$inferSelect>()),
       },
     },
     get: {
       method: 'GET' as const,
-      path: '/api/plants/:id',
+      path: `${BASE_URL}/api/plants/:id`,
       responses: {
         200: z.custom<typeof plants.$inferSelect>(),
         404: errorSchemas.notFound,
@@ -76,7 +78,7 @@ export const api = {
   trends: {
     list: {
       method: 'GET' as const,
-      path: '/api/trends',
+      path: `${BASE_URL}/api/trends`,
       input: z.object({ search: z.string().optional() }).optional(),
       responses: {
         200: z.array(z.custom<typeof trends.$inferSelect>()),
@@ -86,14 +88,14 @@ export const api = {
   tasks: {
     list: {
       method: 'GET' as const,
-      path: '/api/tasks',
+      path: `${BASE_URL}/api/tasks`,
       responses: {
         200: z.array(z.custom<typeof tasks.$inferSelect>()),
       },
     },
     toggle: {
       method: 'PATCH' as const,
-      path: '/api/tasks/:id/toggle',
+      path: `${BASE_URL}/api/tasks/:id`,
       input: z.object({ isCompleted: z.boolean() }),
       responses: {
         200: z.custom<typeof tasks.$inferSelect>(),
@@ -104,7 +106,7 @@ export const api = {
   chat: {
     send: {
       method: 'POST' as const,
-      path: '/api/chat',
+      path: `${BASE_URL}/api/chat`,
       input: z.object({ content: z.string() }),
       responses: {
         200: z.custom<typeof messages.$inferSelect>(), // Returns the assistant's reply
@@ -112,7 +114,7 @@ export const api = {
     },
     history: {
       method: 'GET' as const,
-      path: '/api/chat/history',
+      path: `${BASE_URL}/api/chat/history`,
       responses: {
         200: z.array(z.custom<typeof messages.$inferSelect>()),
       },
